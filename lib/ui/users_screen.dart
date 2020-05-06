@@ -1,8 +1,8 @@
-import 'package:clientfluttersample/api/api.dart';
-import 'package:clientfluttersample/data/user.dart';
-import 'package:clientfluttersample/ui/users_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutterclientsample/api/api.dart';
+import 'package:flutterclientsample/data/user.dart';
+import 'package:flutterclientsample/ui/users_item.dart';
 
 class UsersScreen extends StatefulWidget {
 

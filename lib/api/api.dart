@@ -1,7 +1,7 @@
 import 'dart:core';
 import 'dart:io';
 
-import 'package:clientfluttersample/data/user.dart';
+import 'package:flutterclientsample/data/user.dart';
 import 'package:http/http.dart' as Http;
 
 

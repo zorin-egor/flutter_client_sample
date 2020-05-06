@@ -1,5 +1,6 @@
-import 'package:clientfluttersample/data/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterclientsample/data/user.dart';
+
 
 class UserItem extends StatefulWidget {
 
