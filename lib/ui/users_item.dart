@@ -38,14 +38,34 @@ class _UserItemState extends State<UserItem> {
               );
             }
           ),
-          Row(children: <Widget>[
-            Text(
-                "${widget._item.id} - "
+          Container(
+            margin: EdgeInsets.only(top: 10, bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                    "${widget._item.id} - ",
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(
+                        color: Colors.blueGrey,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold
+                    )
+                ),
+                Text(
+                    widget._item.login,
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold
+                    )
+                )
+              ]
             ),
-            Text(
-                widget._item.login
-            )
-          ])
+          )
         ]
       ),
       shape: RoundedRectangleBorder(
