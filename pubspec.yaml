@@ -26,6 +26,8 @@ dependencies:
   cupertino_icons: ^0.1.3
   http: ^0.12.0
   json_annotation: any
+  visibility_detector: any
+  synchronized: any
 
 dev_dependencies:
   flutter_test:

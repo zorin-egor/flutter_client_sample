@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutterclientsample/data/user.dart';
 import 'package:http/http.dart' as Http;
+import 'package:synchronized/extension.dart';
 
 
 class Api {
@@ -21,21 +22,23 @@ class Api {
   }
 
   Future<List<User>> getUsersJson({ String sinceUser, error(message) }) async {
-    try {
-      final userId = sinceUser ?? _userId;
-      _response = await Http.get(_url + USERS_PATH + userId);
+    return await synchronized(() async {
+      try {
+        final userId = sinceUser ?? _userId;
+        _response = await Http.get(_url + USERS_PATH + userId);
 
-      if (200 <= _response.statusCode && _response.statusCode < 300) {
-        final users = User.fromJson(_response.body);
-        _userId = users.last.id;
-        return Future.value(users);
+        if (200 <= _response.statusCode && _response.statusCode < 300) {
+          final users = User.fromJson(_response.body);
+          _userId = users.last.id;
+          return Future.value(users);
+        }
+
+        throw HttpException(_response.reasonPhrase);
+
+      } catch (e) {
+        return Future.error(e);
       }
-
-      throw HttpException(_response.reasonPhrase);
-
-    } catch (e) {
-      return Future.error(e);
-    }
+    });
   }
 
   Future<List<User>> getUserDefault() async {

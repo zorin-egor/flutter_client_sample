@@ -3,11 +3,12 @@ import 'dart:convert';
 class User {
 
   static List<User> fromJson(String json) {
-    var jsonList = jsonDecode(json) as List;
-    var userList = jsonList.map((item) => User.fromMap(item)).toList();
-    return userList;
+    return (jsonDecode(json) as List)
+        .map((item) => User.fromMap(item))
+        .toList();
   }
 
+  String key;
   final String id;
   final String login;
   final String avatarUrl;
