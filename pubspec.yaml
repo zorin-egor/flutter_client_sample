@@ -28,6 +28,8 @@ dependencies:
   json_annotation: any
   visibility_detector: any
   synchronized: any
+  intl: any
+  url_launcher: any
 
 dev_dependencies:
   flutter_test:

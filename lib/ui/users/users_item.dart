@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterclientsample/data/user.dart';
+import 'package:flutterclientsample/ui/base/constants.dart';
+import 'package:flutterclientsample/ui/base/image_user.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class UserItem extends StatefulWidget {
@@ -34,7 +36,7 @@ class _UserItemState extends State<UserItem> {
         elevation: 5,
         margin: EdgeInsets.all(10),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
         ),
 
         child: Column(
@@ -43,31 +45,17 @@ class _UserItemState extends State<UserItem> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
 
-            ConstrainedBox(
-              constraints: BoxConstraints(
-                  minHeight: UserItem.ITEM_IMAGE_HEIGHT,
-                  maxHeight: UserItem.ITEM_IMAGE_HEIGHT
-              ),
-              child: Image.network(
-                  widget._item.avatarUrl,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    }
-
-                    return Center(
-                      child: CircularProgressIndicator(
-                        value: loadingProgress.expectedTotalBytes != null?
-                            loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes : null,
-                      ),
-                    );
-                  }
-              )
+            // User avatar
+            ImageUser(
+              widget._item.avatarUrl
             ),
 
+            // User id - login
             Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10),
+              margin: EdgeInsets.only(
+                  top: DEFAULT_WIDGET_MARGIN_MEDIUM,
+                  bottom: DEFAULT_WIDGET_MARGIN_MEDIUM
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,

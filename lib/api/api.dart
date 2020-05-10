@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:io';
 
+import 'package:flutterclientsample/data/details.dart';
 import 'package:flutterclientsample/data/user.dart';
 import 'package:http/http.dart' as Http;
 import 'package:synchronized/extension.dart';
@@ -43,6 +44,24 @@ class Api {
 
   Future<List<User>> getUserDefault() async {
     return getUsersJson(sinceUser: USERS_DEFAULT_ID);
+  }
+
+  Future<Details> getDetailsJson(String detailsUrl, { error(message) }) async {
+    return await synchronized(() async {
+      try {
+        _response = await Http.get(detailsUrl);
+
+        if (200 <= _response.statusCode && _response.statusCode < 300) {
+          final details = Details.fromJson(_response.body);
+          return Future.value(details);
+        }
+
+        throw HttpException(_response.reasonPhrase);
+
+      } catch (e) {
+        return Future.error(e);
+      }
+    });
   }
 
 }
