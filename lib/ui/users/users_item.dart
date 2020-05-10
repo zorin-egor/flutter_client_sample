@@ -34,7 +34,7 @@ class _UserItemState extends State<UserItem> {
         semanticContainer: true,
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.all(DEFAULT_WIDGET_MARGIN_MEDIUM),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
         ),

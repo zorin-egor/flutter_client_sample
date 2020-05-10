@@ -51,24 +51,40 @@ class _DetailsScreenState extends State<DetailsScreen> {
         }),
 
         child: Center (
-          child: ConstrainedBox(
-            constraints:  isTablet(context)? BoxConstraints(
-              minWidth: DEFAULT_WIDGET_WIDTH,
-              maxWidth: DEFAULT_WIDGET_WIDTH
-            ) : BoxConstraints(),
-            child: SingleChildScrollView(
-              child: Column(
+          child: isTablet(context)? Card (
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            elevation: 5,
+            margin: EdgeInsets.all(DEFAULT_WIDGET_MARGIN_MEDIUM),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
+            ),
+            child: _getWidget(),
+          ) : _getWidget()
+        )
+      )
+    );
+  }
+
+  Widget _getWidget() {
+    return ConstrainedBox(
+        constraints:  isTablet(context)? BoxConstraints(
+            minWidth: DEFAULT_WIDGET_WIDTH,
+            maxWidth: DEFAULT_WIDGET_WIDTH
+        ) : BoxConstraints(),
+        child: SingleChildScrollView(
+            child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
 
                   // User avatar
                   ImageUser(
-                    _details?.avatarUrl
+                      _details?.avatarUrl
                   ),
 
                   SizedBox(
-                    height: DEFAULT_WIDGET_MARGIN_MEDIUM
+                      height: DEFAULT_WIDGET_MARGIN_MEDIUM
                   ),
 
                   // User detail information
@@ -84,50 +100,47 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     }
 
                     return Padding(
-                      padding: EdgeInsets.only(
-                          left: DEFAULT_WIDGET_MARGIN_LARGE,
-                          right: DEFAULT_WIDGET_MARGIN_LARGE,
-                          top: DEFAULT_WIDGET_MARGIN_SMALL,
-                          bottom: DEFAULT_WIDGET_MARGIN_SMALL
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: '${entry.key}: ',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blueGrey,
-                                    fontWeight: FontWeight.bold
-                                )
-                            ),
-                            TextSpan(
-                                text: '$value',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: isUrl? Colors.blue : Colors.grey,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: isUrl? TextDecoration.underline : TextDecoration.none
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    if (isUrl) {
-                                      await launch(value);
-                                    }
-                                  }
-                            ),
-                          ],
+                        padding: EdgeInsets.only(
+                            left: DEFAULT_WIDGET_MARGIN_LARGE,
+                            right: DEFAULT_WIDGET_MARGIN_LARGE,
+                            top: DEFAULT_WIDGET_MARGIN_SMALL,
+                            bottom: DEFAULT_WIDGET_MARGIN_SMALL
                         ),
-                      )
+                        child: RichText(
+                          text: TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: '${entry.key}: ',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blueGrey,
+                                      fontWeight: FontWeight.bold
+                                  )
+                              ),
+                              TextSpan(
+                                  text: '$value',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: isUrl? Colors.blue : Colors.grey,
+                                      fontWeight: FontWeight.bold,
+                                      decoration: isUrl? TextDecoration.underline : TextDecoration.none
+                                  ),
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () async {
+                                      if (isUrl) {
+                                        await launch(value);
+                                      }
+                                    }
+                              ),
+                            ],
+                          ),
+                        )
                     );
                   }) ?? List()
 
                 ]
-              )
             )
-          ),
         )
-      )
     );
   }
 
