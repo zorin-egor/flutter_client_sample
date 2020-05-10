@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterclientsample/api/api.dart';
 import 'package:flutterclientsample/data/user.dart';
+import 'package:flutterclientsample/ui/base/animation.dart';
 import 'package:flutterclientsample/ui/base/constants.dart';
 import 'package:flutterclientsample/ui/details/details_screen.dart';
 import 'package:flutterclientsample/ui/users/users_item.dart';
@@ -84,9 +85,7 @@ class _UsersScreenState extends State<UsersScreen> {
                               _lastVisibleItem = lastVisible;
                             }),
                             onLongPress: () => setState(() => _removeItem(index)),
-                            onTap: () => Navigator.push(
-                                context, MaterialPageRoute(builder: (context) => DetailsScreen(item))
-                            )
+                            onTap: () => Navigator.push(context, animateRoute(DetailsScreen(item)))
                         )
                     );
                   }
