@@ -1,8 +1,11 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterclientsample/api/api.dart';
 import 'package:flutterclientsample/data/details.dart';
 import 'package:flutterclientsample/data/user.dart';
+import 'package:flutterclientsample/ui/base/animation.dart';
 import 'package:flutterclientsample/ui/base/constants.dart';
 import 'package:flutterclientsample/ui/base/image_user.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -126,11 +129,20 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       decoration: isUrl? TextDecoration.underline : TextDecoration.none
                                   ),
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () async {
-                                      if (isUrl) {
-                                        await launch(value);
+                                      ..onTap = () {
+                                        if (isUrl) {
+                                          Navigator.push(context, animateRoute(
+                                              opaque: false,
+                                              barrierDismissible: true,
+                                              widget: _getDialogOpenLink(value)
+                                          ));
+                                        }
                                       }
-                                    }
+//                                    ..onTap = () async {
+//                                      if (isUrl) {
+//                                        await launch(value);
+//                                      }
+//                                    }
                               ),
                             ],
                           ),
@@ -141,6 +153,32 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ]
             )
         )
+    );
+  }
+
+  Widget _getDialogOpenLink(String url) {
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: AlertDialog(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
+        ),
+        title: new Text("Open link?"),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await launch(url);
+            },
+            child: Text("Open")
+          ),
+          FlatButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Close")
+          )
+        ],
+      )
     );
   }
 

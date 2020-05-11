@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 
-Route animateRoute(Widget widget) {
+Route animateRoute({
+  @required Widget widget,
+  opaque = true,
+  barrierDismissible = false
+}) {
   return PageRouteBuilder(
+    opaque: opaque,
+    barrierDismissible: barrierDismissible,
     pageBuilder: (context, animation, secondaryAnimation) => widget,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       return SlideTransition(
