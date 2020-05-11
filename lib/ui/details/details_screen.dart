@@ -1,5 +1,6 @@
 import 'dart:ui' show ImageFilter;
 
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterclientsample/api/api.dart';
@@ -42,7 +43,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Toolbar title"),
+        title: Text("Details screen"),
       ),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
@@ -138,11 +139,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           ));
                                         }
                                       }
-//                                    ..onTap = () async {
-//                                      if (isUrl) {
-//                                        await launch(value);
-//                                      }
-//                                    }
                               ),
                             ],
                           ),
@@ -183,12 +179,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   void _showSnackBar(String message) {
-    _scaffoldKey.currentState.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(
-        SnackBar(
-          content: Text(message)
-        )
-    );
+    Flushbar(
+      message: message,
+      maxWidth: isTablet(_scaffoldKey.currentState.context)? DEFAULT_WIDGET_WIDTH : double.infinity,
+      isDismissible: true,
+      duration: Duration(seconds: 2),
+      flushbarStyle: FlushbarStyle.FLOATING,
+      margin: EdgeInsets.all(5.0),
+      borderRadius: 5.0
+    ).show(_scaffoldKey.currentState.context);
   }
 
 }

@@ -1,7 +1,9 @@
 import 'dart:core';
 
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutterclientsample/api/api.dart';
 import 'package:flutterclientsample/data/user.dart';
 import 'package:flutterclientsample/ui/base/animation.dart';
@@ -46,54 +48,78 @@ class _UsersScreenState extends State<UsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: isAndroid(context)? false : true,
       key: _scaffoldKey,
-      body: NestedScrollView(
-        controller: _appBarScrollController,
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              title: Text('Floating app bar'),
-              // Allows the user to reveal the app bar if they begin scrolling back
-              // up the list of items.
-              floating: true,
-              // Display a placeholder widget to visualize the shrinking size.
-              flexibleSpace: Placeholder(),
-              // Make the initial height of the SliverAppBar larger than normal.
-              expandedHeight: 150,
-            )
-          ];
-        },
+      body: SafeArea(
+        top: false,
+        child: NestedScrollView(
+            controller: _appBarScrollController,
+            headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
+              SliverOverlapAbsorber(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  sliver: SliverAppBar(
+                    snap: true,
+                    floating: true,
+                    primary: true,
+                    flexibleSpace: Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(
+                          top: DEFAULT_WIDGET_MARGIN_MEDIUM + MediaQuery.of(context).viewInsets.top,
+                          left: DEFAULT_WIDGET_MARGIN_MEDIUM,
+                          right: DEFAULT_WIDGET_MARGIN_MEDIUM,
+                          bottom: DEFAULT_WIDGET_MARGIN_MEDIUM,
+                        ),
+                        child: Image.asset("assets/github_appbar.png")
+                    ),
+                    expandedHeight: 150,
+                  )
+              )
+            ],
 
-        body: RefreshIndicator(
-          key: _refreshIndicatorKey,
+            body: RefreshIndicator(
+                key: _refreshIndicatorKey,
 
-          onRefresh: () => _api.getUserDefault().then((items) => setState(() {
-            _users = items;
-          })).catchError((error) {
-            _showSnackBar(error.toString());
-          }),
+                onRefresh: () => _api.getUserDefault().then((items) => setState(() {
+                  _users = items;
+                })).catchError((error) {
+                  _showFlushbar(error.toString());
 
-          child: NotificationListener<ScrollUpdateNotification>(
-            onNotification: (notification) => _listScrollListener(notification: notification),
-            child: Center(
-                child: ConstrainedBox(
-                    constraints: isTablet(context)? BoxConstraints(
-                        minWidth: DEFAULT_WIDGET_WIDTH,
-                        maxWidth: DEFAULT_WIDGET_WIDTH
-                    ) : BoxConstraints(),
-                    child: CustomScrollView(
-                        slivers: [
-                          SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  (context, index) => _itemAction(context, index)
-                              )
+//                  setState(() {
+//                    _users = [
+//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
+//                      User(id: "2", nodeId: "2", login: "2", url: "2", avatarUrl: "2"),
+//                      User(id: "3", nodeId: "3", login: "3", url: "3", avatarUrl: "3"),
+//                      User(id: "4", nodeId: "4", login: "4", url: "4", avatarUrl: "4"),
+//                      User(id: "5", nodeId: "5", login: "5", url: "5", avatarUrl: "5")
+//                    ];
+//                  });
+                }),
+
+                child: NotificationListener<ScrollUpdateNotification>(
+                  onNotification: (notification) => _listScrollListener(notification: notification),
+                  child: Center(
+                      child: ConstrainedBox(
+                          constraints: isTablet(context)? BoxConstraints(
+                              minWidth: DEFAULT_WIDGET_WIDTH,
+                              maxWidth: DEFAULT_WIDGET_WIDTH
+                          ) : BoxConstraints(),
+                          child: CustomScrollView(
+                              slivers: [
+                                SliverPadding(
+                                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                  sliver: SliverList(
+                                      delegate: SliverChildBuilderDelegate(
+                                          (context, index) => _itemAction(context, index)
+                                      )
+                                  )
+                                )
+                              ]
                           )
-                        ]
-                    )
+                      )
+                  ),
                 )
-            ),
-          )
 
+            )
         )
       )
     );
@@ -134,23 +160,32 @@ class _UsersScreenState extends State<UsersScreen> {
 
   void _removeItem(int index) {
     final item = _users.removeAt(index);
-    _showSnackBar(
+    _showFlushbar(
         "Removed view with index: $index",
-        actionSnackBar: SnackBarAction(
-          label: "UNDO",
-          onPressed: () => setState(() => _users.insert(index, item))
-        )
+        mainButtonFunc: () => setState(() => _users.insert(index, item)),
+        mainButtonText: "UNDO"
     );
   }
 
-  void _showSnackBar(String message, { SnackBarAction actionSnackBar }) {
-    _scaffoldKey.currentState.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(
-      SnackBar(
-          content: Text(message),
-          action: actionSnackBar
-        )
-    );
+  void _showFlushbar(String message, { Function mainButtonFunc, String mainButtonText }) {
+    Flushbar(
+      message: message,
+      maxWidth: isTablet(_scaffoldKey.currentState.context)? DEFAULT_WIDGET_WIDTH : double.infinity,
+      isDismissible: true,
+      duration: Duration(seconds: 2),
+      flushbarStyle: FlushbarStyle.FLOATING,
+      margin: EdgeInsets.all(5.0),
+      borderRadius: 5.0,
+      mainButton: FlatButton(
+        onPressed: () {
+          mainButtonFunc();
+        },
+        child: Text(
+          mainButtonText,
+          style: TextStyle(color: Colors.blueAccent),
+        ),
+      )
+    ).show(_scaffoldKey.currentState.context);
   }
 
   void _appBarScrollListener() {
@@ -167,9 +202,8 @@ class _UsersScreenState extends State<UsersScreen> {
           _users.addAll(items);
         }
       )).catchError((error) {
-        _showSnackBar(error.toString());
+        _showFlushbar(error.toString());
       });
-
       return true;
     }
 
