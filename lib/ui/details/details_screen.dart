@@ -42,117 +42,123 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      extendBodyBehindAppBar: isTablet(context)? false : true,
+      resizeToAvoidBottomInset: isAndroid(context)? true : false,
       appBar: AppBar(
-        title: Text("Details screen"),
+        backgroundColor: isTablet(context)? Colors.blueAccent : Colors.transparent,
+        elevation: 0.0,
       ),
       body: RefreshIndicator(
-        key: _refreshIndicatorKey,
+          key: _refreshIndicatorKey,
 
-        onRefresh: () => _api.getDetailsJson(widget._user.url).then((item) => setState(() {
-          _details = item;
-        })).catchError((error) {
-          _showSnackBar(error.toString());
-        }),
+          onRefresh: () => _api.getDetailsJson(widget._user.url).then((item) => setState(() {
+            _details = item;
+          })).catchError((error) {
+            _showSnackBar(error.toString());
+          }),
 
-        child: Center (
-          child: isTablet(context)? Card (
-            semanticContainer: true,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            elevation: 5,
-            margin: EdgeInsets.all(DEFAULT_WIDGET_MARGIN_MEDIUM),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
-            ),
-            child: _getWidget(),
-          ) : _getWidget()
-        )
+          child: Center (
+              child: isTablet(context)? Card (
+                semanticContainer: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                elevation: 5,
+                margin: EdgeInsets.all(DEFAULT_WIDGET_MARGIN_MEDIUM),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
+                ),
+                child: _getWidget(context),
+              ) : _getWidget(context)
+          )
       )
     );
   }
 
-  Widget _getWidget() {
+  Widget _getWidget(BuildContext context) {
     return ConstrainedBox(
         constraints:  isTablet(context)? BoxConstraints(
             minWidth: DEFAULT_WIDGET_WIDTH,
             maxWidth: DEFAULT_WIDGET_WIDTH
         ) : BoxConstraints(),
         child: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
+          padding: EdgeInsets.only(
+              bottom: isAndroid(context)? MediaQuery.of(context).viewInsets.bottom : 0.0
+          ),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
 
-                  // User avatar
-                  ImageUser(
-                      _details?.avatarUrl
-                  ),
+                // User avatar
+                ImageUser(
+                    _details?.avatarUrl
+                ),
 
-                  SizedBox(
-                      height: DEFAULT_WIDGET_MARGIN_MEDIUM
-                  ),
+                SizedBox(
+                    height: DEFAULT_WIDGET_MARGIN_MEDIUM
+                ),
 
-                  // User detail information
-                  ..._details?.toPretty()?.entries?.map((entry) {
+                // User detail information
+                ..._details?.toPretty()?.entries?.map((entry) {
 
-                    final value = entry.value.replaceAll("null", "");
+                  final value = entry.value.replaceAll("null", "");
 
-                    bool isUrl = false;
-                    try {
-                      isUrl = Uri.parse(value).isAbsolute;
-                    } catch(e) {
-                      // Stub
-                    }
+                  bool isUrl = false;
+                  try {
+                    isUrl = Uri.parse(value).isAbsolute;
+                  } catch(e) {
+                    // Stub
+                  }
 
-                    return Padding(
-                        padding: EdgeInsets.only(
-                            left: DEFAULT_WIDGET_MARGIN_LARGE,
-                            right: DEFAULT_WIDGET_MARGIN_LARGE,
-                            top: DEFAULT_WIDGET_MARGIN_SMALL,
-                            bottom: DEFAULT_WIDGET_MARGIN_SMALL
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                  text: '${entry.key}: ',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.blueGrey,
-                                      fontWeight: FontWeight.bold
-                                  )
-                              ),
-                              TextSpan(
-                                  text: '$value',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: isUrl? Colors.blue : Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                      decoration: isUrl? TextDecoration.underline : TextDecoration.none
-                                  ),
-                                  recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        if (isUrl) {
-                                          Navigator.push(context, animateRoute(
-                                              opaque: false,
-                                              barrierDismissible: true,
-                                              widget: _getDialogOpenLink(value)
-                                          ));
-                                        }
+                  return Padding(
+                      padding: EdgeInsets.only(
+                          left: DEFAULT_WIDGET_MARGIN_LARGE,
+                          right: DEFAULT_WIDGET_MARGIN_LARGE,
+                          top: DEFAULT_WIDGET_MARGIN_SMALL,
+                          bottom: DEFAULT_WIDGET_MARGIN_SMALL
+                      ),
+                      child: RichText(
+                        text: TextSpan(
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: '${entry.key}: ',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.blueGrey,
+                                    fontWeight: FontWeight.bold
+                                )
+                            ),
+                            TextSpan(
+                                text: '$value',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: isUrl? Colors.blue : Colors.grey,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: isUrl? TextDecoration.underline : TextDecoration.none
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      if (isUrl) {
+                                        Navigator.push(context, animateRoute(
+                                            opaque: false,
+                                            barrierDismissible: true,
+                                            widget: _getDialogOpenLink(context, value)
+                                        ));
                                       }
-                              ),
-                            ],
-                          ),
-                        )
-                    );
-                  }) ?? List()
+                                    }
+                            ),
+                          ],
+                        ),
+                      )
+                  );
+                }) ?? List()
 
-                ]
-            )
+              ]
+          )
         )
     );
   }
 
-  Widget _getDialogOpenLink(String url) {
+  Widget _getDialogOpenLink(BuildContext context, String url) {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
       child: AlertDialog(

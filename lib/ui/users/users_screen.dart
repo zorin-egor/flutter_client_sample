@@ -48,8 +48,8 @@ class _UsersScreenState extends State<UsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: isAndroid(context)? false : true,
       key: _scaffoldKey,
+      resizeToAvoidBottomInset: isAndroid(context)? false : true,
       body: SafeArea(
         top: false,
         child: NestedScrollView(
@@ -181,7 +181,7 @@ class _UsersScreenState extends State<UsersScreen> {
           mainButtonFunc();
         },
         child: Text(
-          mainButtonText,
+          mainButtonText ?? "",
           style: TextStyle(color: Colors.blueAccent),
         ),
       )
