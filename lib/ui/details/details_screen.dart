@@ -3,6 +3,7 @@ import 'dart:ui' show ImageFilter;
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutterclientsample/api/api.dart';
 import 'package:flutterclientsample/data/details.dart';
 import 'package:flutterclientsample/data/user.dart';
@@ -40,46 +41,57 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      extendBodyBehindAppBar: isTablet(context)? false : true,
-      resizeToAvoidBottomInset: isAndroid(context)? true : false,
-      appBar: AppBar(
-        backgroundColor: isTablet(context)? Colors.blueAccent : Colors.transparent,
-        elevation: 0.0,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark
       ),
-      body: RefreshIndicator(
-          key: _refreshIndicatorKey,
 
-          onRefresh: () => _api.getDetailsJson(widget._user.url).then((item) => setState(() {
-            _details = item;
-          })).catchError((error) {
-            _showSnackBar(error.toString());
-          }),
+      child: SafeArea(
+        top: false,
 
-          child: Center (
-              child: isTablet(context)? Card (
-                semanticContainer: true,
+        child: Scaffold(
+          key: _scaffoldKey,
+          extendBodyBehindAppBar: isTablet(context)? false : true,
+          resizeToAvoidBottomInset: isAndroid(context)? true : false,
+
+          appBar: AppBar(
+            backgroundColor: isTablet(context)? Colors.blueAccent : Colors.transparent,
+            elevation: 0.0,
+          ),
+
+          body: RefreshIndicator(
+              key: _refreshIndicatorKey,
+
+              onRefresh: () => _api.getDetailsJson(widget._user.url).then((item) => setState(() {
+                _details = item;
+              })).catchError((error) {
+                _showSnackBar(error.toString());
+              }),
+
+              child: isTablet(context)? Card(
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 elevation: 5,
                 margin: EdgeInsets.all(DEFAULT_WIDGET_MARGIN_MEDIUM),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
                 ),
-                child: _getWidget(context),
-              ) : _getWidget(context)
-          )
+                child: _getMainWidget(context),
+              ) : _getMainWidget(context)
+          ),
+        )
       )
     );
   }
 
-  Widget _getWidget(BuildContext context) {
+  Widget _getMainWidget(BuildContext context) {
     return ConstrainedBox(
         constraints:  isTablet(context)? BoxConstraints(
             minWidth: DEFAULT_WIDGET_WIDTH,
             maxWidth: DEFAULT_WIDGET_WIDTH
         ) : BoxConstraints(),
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.only(
               bottom: isAndroid(context)? MediaQuery.of(context).viewInsets.bottom : 0.0
           ),
@@ -109,51 +121,58 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     // Stub
                   }
 
-                  return Padding(
-                      padding: EdgeInsets.only(
-                          left: DEFAULT_WIDGET_MARGIN_LARGE,
-                          right: DEFAULT_WIDGET_MARGIN_LARGE,
-                          top: DEFAULT_WIDGET_MARGIN_SMALL,
-                          bottom: DEFAULT_WIDGET_MARGIN_SMALL
-                      ),
-                      child: RichText(
-                        text: TextSpan(
-                          children: <TextSpan>[
-                            TextSpan(
-                                text: '${entry.key}: ',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blueGrey,
-                                    fontWeight: FontWeight.bold
-                                )
-                            ),
-                            TextSpan(
-                                text: '$value',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: isUrl? Colors.blue : Colors.grey,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: isUrl? TextDecoration.underline : TextDecoration.none
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      if (isUrl) {
-                                        Navigator.push(context, animateRoute(
-                                            opaque: false,
-                                            barrierDismissible: true,
-                                            widget: _getDialogOpenLink(context, value)
-                                        ));
-                                      }
-                                    }
-                            ),
-                          ],
-                        ),
-                      )
-                  );
+                  return _getDetailsWidget(context, entry.key, value, isUrl);
                 }) ?? List()
 
               ]
           )
+        )
+    );
+  }
+
+  Widget _getDetailsWidget(BuildContext context, String title, String value, bool isUrl) {
+    return Padding(
+        padding: EdgeInsets.only(
+            left: DEFAULT_WIDGET_MARGIN_LARGE,
+            right: DEFAULT_WIDGET_MARGIN_LARGE,
+            top: DEFAULT_WIDGET_MARGIN_SMALL,
+            bottom: DEFAULT_WIDGET_MARGIN_SMALL
+        ),
+
+        child: RichText(
+          text: TextSpan(
+            children: <TextSpan>[
+
+              TextSpan(
+                  text: '$title: ',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.blueGrey,
+                      fontWeight: FontWeight.bold
+                  )
+              ),
+
+              TextSpan(
+                  text: '$value',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: isUrl? Colors.blue : Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      decoration: isUrl? TextDecoration.underline : TextDecoration.none
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      if (isUrl) {
+                        Navigator.push(context, animateRoute(
+                            opaque: false,
+                            barrierDismissible: true,
+                            widget: _getDialogOpenLink(context, value)
+                        ));
+                      }
+                    }
+              ),
+            ],
+          ),
         )
     );
   }

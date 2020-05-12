@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterclientsample/api/api.dart';
 import 'package:flutterclientsample/data/user.dart';
@@ -47,13 +48,22 @@ class _UsersScreenState extends State<UsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomInset: isAndroid(context)? false : true,
-      body: SafeArea(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark
+      ),
+
+      child: SafeArea(
         top: false,
-        child: NestedScrollView(
+
+        child: Scaffold(
+          key: _scaffoldKey,
+          resizeToAvoidBottomInset: isAndroid(context)? false : true,
+
+          body: NestedScrollView(
             controller: _appBarScrollController,
+
             headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => <Widget>[
               SliverOverlapAbsorber(
                   handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
@@ -83,49 +93,47 @@ class _UsersScreenState extends State<UsersScreen> {
                   _users = items;
                 })).catchError((error) {
                   _showFlushbar(error.toString());
-
-//                  setState(() {
-//                    _users = [
-//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
-//                      User(id: "2", nodeId: "2", login: "2", url: "2", avatarUrl: "2"),
-//                      User(id: "3", nodeId: "3", login: "3", url: "3", avatarUrl: "3"),
-//                      User(id: "4", nodeId: "4", login: "4", url: "4", avatarUrl: "4"),
-//                      User(id: "5", nodeId: "5", login: "5", url: "5", avatarUrl: "5")
-//                    ];
-//                  });
                 }),
 
-                child: NotificationListener<ScrollUpdateNotification>(
-                  onNotification: (notification) => _listScrollListener(notification: notification),
-                  child: Center(
-                      child: ConstrainedBox(
-                          constraints: isTablet(context)? BoxConstraints(
-                              minWidth: DEFAULT_WIDGET_WIDTH,
-                              maxWidth: DEFAULT_WIDGET_WIDTH
-                          ) : BoxConstraints(),
-                          child: CustomScrollView(
-                              slivers: [
-                                SliverPadding(
-                                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                  sliver: SliverList(
-                                      delegate: SliverChildBuilderDelegate(
-                                          (context, index) => _itemAction(context, index)
-                                      )
-                                  )
-                                )
-                              ]
-                          )
-                      )
-                  ),
-                )
-
+                child: _getListWidget(context)
             )
+
+          )
         )
       )
     );
   }
 
-  Widget _itemAction(BuildContext context, int index) {
+  Widget _getListWidget(BuildContext context) {
+    return NotificationListener<ScrollUpdateNotification>(
+      onNotification: (notification) => _listScrollListener(notification: notification),
+
+      child: Center(
+
+          child: ConstrainedBox(
+              constraints: isTablet(context)? BoxConstraints(
+                  minWidth: DEFAULT_WIDGET_WIDTH,
+                  maxWidth: DEFAULT_WIDGET_WIDTH
+              ) : BoxConstraints(),
+
+              child: CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                        sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                                (context, index) => _getItemWidget(context, index)
+                            )
+                        )
+                    )
+                  ]
+              )
+          )
+      ),
+    );
+  }
+
+  Widget _getItemWidget(BuildContext context, int index) {
     debugPrint("User screen widget item index: $index");
 
     // Get already downloaded users
