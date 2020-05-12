@@ -3,9 +3,9 @@ import 'package:flutterclientsample/ui/base/constants.dart';
 
 class ImageUser extends StatefulWidget {
 
-  String url;
+  String _url;
 
-  ImageUser(this.url, { Key key }) : super(key: key);
+  ImageUser(this._url, { Key key }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => ImageUserState();
@@ -15,20 +15,13 @@ class ImageUser extends StatefulWidget {
 class ImageUserState extends State<ImageUser> {
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Add init here
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
-          minHeight: DEFAULT_WIDGET_HEIGHT,
-          maxHeight: DEFAULT_WIDGET_HEIGHT
+      constraints: BoxConstraints.expand(
+          height: DEFAULT_WIDGET_HEIGHT
       ),
       child: Image.network(
-          widget.url ?? "",
+          widget._url ?? "",
           fit: BoxFit.cover,
           loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
             if (loadingProgress == null) {

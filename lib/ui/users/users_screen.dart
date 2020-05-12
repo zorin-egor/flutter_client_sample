@@ -109,7 +109,6 @@ class _UsersScreenState extends State<UsersScreen> {
       onNotification: (notification) => _listScrollListener(notification: notification),
 
       child: Center(
-
           child: ConstrainedBox(
               constraints: isTablet(context)? BoxConstraints(
                   minWidth: DEFAULT_WIDGET_WIDTH,
@@ -144,14 +143,16 @@ class _UsersScreenState extends State<UsersScreen> {
             key: UniqueKey(),
             background: Container(color: Colors.red),
             onDismissed: (direction) => _removeItem(index),
-            child: GestureDetector(
-                child: UserItem(item, index, (lastVisible) {
-                  debugPrint("User screen first visible: $lastVisible");
-                  _lastVisibleItem = lastVisible;
-                }),
-                onLongPress: () => setState(() => _removeItem(index)),
-                onTap: () => Navigator.push(context, animateRoute(widget: DetailsScreen(item)))
-            )
+              child: UserItem(
+                  item: item,
+                  index: index,
+                  itemTap: () => Navigator.push(context, animateRoute(widget: DetailsScreen(item))),
+                  itemLongPress: () => setState(() => _removeItem(index)),
+                  itemVisibility: (lastVisible) {
+                    debugPrint("User screen first visible: $lastVisible");
+                    _lastVisibleItem = lastVisible;
+                  }
+              )
         );
       }
     }

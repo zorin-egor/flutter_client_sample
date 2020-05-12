@@ -69,15 +69,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 _showSnackBar(error.toString());
               }),
 
-              child: isTablet(context)? Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                elevation: 5,
-                margin: EdgeInsets.all(DEFAULT_WIDGET_MARGIN_MEDIUM),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
-                ),
-                child: _getMainWidget(context),
-              ) : _getMainWidget(context)
+              child: isTablet(context)?
+                Center(
+                  child: Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    elevation: 5,
+                    margin: EdgeInsets.all(DEFAULT_WIDGET_MARGIN_MEDIUM),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(DEFAULT_WIDGET_MARGIN_MEDIUM),
+                    ),
+                    child: _getMainWidget(context),
+                  ),
+                ) : _getMainWidget(context)
           ),
         )
       )
