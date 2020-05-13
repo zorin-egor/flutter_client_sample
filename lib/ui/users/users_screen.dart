@@ -56,7 +56,7 @@ class _UsersScreenState extends State<UsersScreen> {
 
       child: SafeArea(
         top: false,
-
+        bottom: false,
         child: Scaffold(
           key: _scaffoldKey,
           resizeToAvoidBottomInset: isAndroid(context)? false : true,
@@ -70,14 +70,13 @@ class _UsersScreenState extends State<UsersScreen> {
                   sliver: SliverAppBar(
                     snap: true,
                     floating: true,
-                    primary: true,
                     flexibleSpace: Container(
                         alignment: Alignment.center,
                         margin: EdgeInsets.only(
                           top: DEFAULT_WIDGET_MARGIN_MEDIUM + MediaQuery.of(context).viewInsets.top,
                           left: DEFAULT_WIDGET_MARGIN_MEDIUM,
                           right: DEFAULT_WIDGET_MARGIN_MEDIUM,
-                          bottom: DEFAULT_WIDGET_MARGIN_MEDIUM,
+                          bottom: DEFAULT_WIDGET_MARGIN_MEDIUM
                         ),
                         child: Image.asset("assets/github_appbar.png")
                     ),
@@ -93,6 +92,15 @@ class _UsersScreenState extends State<UsersScreen> {
                   _users = items;
                 })).catchError((error) {
                   _showFlushbar(error.toString());
+
+//                  setState(() {
+//                    _users = [
+//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
+//                      User(id: "2", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
+//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
+//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1")
+//                    ];
+//                  });
                 }),
 
                 child: _getListWidget(context)
@@ -115,18 +123,12 @@ class _UsersScreenState extends State<UsersScreen> {
                   maxWidth: DEFAULT_WIDGET_WIDTH
               ) : BoxConstraints(),
 
-              child: CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                        sliver: SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                                (context, index) => _getItemWidget(context, index)
-                            )
-                        )
-                    )
-                  ]
+              child: ListView.builder(
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) => _getItemWidget(context, index)
               )
+
           )
       ),
     );
