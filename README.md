@@ -1,6 +1,6 @@
-# clientfluttersample
+# Flutter client sample
 
-A new Flutter application.
+Flutter client sample app for github users api. The application has screen with users loading list and screen with the user detail info.
 
 ## Getting Started
 
