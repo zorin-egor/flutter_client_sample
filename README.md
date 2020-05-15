@@ -5,6 +5,6 @@ Flutter client sample app for github users api. The application has screen with 
 ## Screenshots
 <p align="center">
   <a>
-    <img alt="FlutterClientSample" src="https://user-images.githubusercontent.com/13707343/82035956-ef332500-96a8-11ea-9ca4-c85f30847ef5.gif" />
+    <img alt="FlutterClientSample" src="https://user-images.githubusercontent.com/13707343/82062394-b740d780-96d2-11ea-91e4-308c1aaa7436.gif" />
   </a>
 </p>
