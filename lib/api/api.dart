@@ -51,8 +51,6 @@ class Api {
     }
   }
 
-
-
   Future<List<User>> getUserDefault() async {
     return getUsersJson(sinceUser: USERS_DEFAULT_ID);
   }
