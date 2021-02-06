@@ -5,7 +5,6 @@ import 'package:flutterclientsample/data/details.dart';
 import 'package:flutterclientsample/data/user.dart';
 import 'package:http/http.dart' as Http;
 
-
 class Api {
 
   static final String BASE_URL = "https://api.github.com";
@@ -18,7 +17,6 @@ class Api {
   bool _isUsersFuture;
   bool _isDetailsFuture;
 
-
   Api([this._url]) {
     _url ??= BASE_URL;
     _userId = USERS_DEFAULT_ID;
@@ -27,11 +25,11 @@ class Api {
   }
 
   Future<List<User>> getUsersJson({ String sinceUser, error(message) }) async {
-    try {
-      if (_isUsersFuture) {
-        return Future.error("Request is still running");
-      }
+    if (_isUsersFuture) {
+      return Future.error("Request is still running");
+    }
 
+    try {
       _isUsersFuture = true;
       final userId = sinceUser ?? _userId;
       _response = await Http.get(_url + USERS_PATH + userId);
@@ -56,11 +54,11 @@ class Api {
   }
 
   Future<Details> getDetailsJson(String detailsUrl, { error(message) }) async {
-    try {
-      if (_isDetailsFuture) {
-        return Future.error("Request is still running");
-      }
+    if (_isDetailsFuture) {
+      return Future.error("Request is still running");
+    }
 
+    try {
       _isDetailsFuture = true;
       _response = await Http.get(detailsUrl);
 

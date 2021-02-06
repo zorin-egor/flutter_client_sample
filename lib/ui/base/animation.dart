@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 Route animateRoute({
   @required Widget widget,
   opaque = true,

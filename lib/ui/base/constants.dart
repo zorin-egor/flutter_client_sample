@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 
-
 const DEFAULT_TABLET_SIZE = 600;
 
 const DEFAULT_WIDGET_WIDTH = 400.0;
