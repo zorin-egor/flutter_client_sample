@@ -27,7 +27,7 @@ class App extends StatelessWidget {
       title: 'Flutter Demo',
 
       theme: ThemeData(
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        visualDensity: VisualDensity.standard,
       ),
 
       initialRoute: UsersScreen.ROUTE,
