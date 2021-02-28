@@ -1,5 +1,4 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:intl/intl.dart';
 
 part 'details.g.dart';
 
@@ -44,19 +43,5 @@ class Details {
 
   factory Details.fromJson(Map<String, dynamic> json) => _$DetailsFromJson(json);
   Map<String, dynamic> toJson() => _$DetailsToJson(this);
-
-  Map<String, dynamic> toPretty() => {
-    'name' : name,
-    'company' : company,
-    'blog' : blog,
-    'location' : location,
-    'email' : email,
-    'bio' : bio,
-    'public repos' : publicRepos,
-    'public gists' : publicGists,
-    'followers' : followers,
-    'following' : following,
-    'created at' : DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(createdAt)),
-  };
 
 }

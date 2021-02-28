@@ -88,7 +88,7 @@ class _UsersScreenState extends State<UsersScreen> {
             body: RefreshIndicator(
                 key: _refreshIndicatorKey,
 
-                onRefresh: () => _api.getUsers("0").then((items) => setState(() {
+                onRefresh: () => _api.getUsers(0).then((items) => setState(() {
                   _users = items;
                 })).catchError((error) {
                   _showFlushbar(error.toString());
@@ -209,7 +209,7 @@ class _UsersScreenState extends State<UsersScreen> {
 
     if (isDown && isEdge) {
       debugPrint("User screen _lastVisibleItem: $_lastVisibleItem");
-      _api.getUsers("0").then((items) => setState(() {
+      _api.getUsers(0).then((items) => setState(() {
           _users.addAll(items);
         }
       )).catchError((error) {

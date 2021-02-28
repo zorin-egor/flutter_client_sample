@@ -113,7 +113,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
 
                 // User detail information
-                ..._details?.toPretty()?.entries?.map((entry) {
+                ..._details?.toJson()?.entries?.map((entry) {
 
                   final value = entry.value/*.replaceAll("null", "")*/;
 

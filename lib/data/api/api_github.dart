@@ -14,7 +14,7 @@ abstract class ApiGithub {
   factory ApiGithub(Dio dio, {String baseUrl}) = _ApiGithub;
 
   @GET("/users")
-  Future<List<User>> getUsers(@Query("since") String since);
+  Future<List<User>> getUsers(@Query("since") int since);
 
   @GET("{detailsUrl}")
   Future<Details> getDetails(@Path("detailsUrl") String url);
