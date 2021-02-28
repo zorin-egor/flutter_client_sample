@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutterclientsample/domain/entities/models/common.dart' as CC;
 import 'package:flutterclientsample/presentation/widgets/base/constants.dart';
 import 'package:flutterclientsample/presentation/screens/users/users_screen.dart';
 

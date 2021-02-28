@@ -5,22 +5,22 @@ part 'details.g.dart';
 @JsonSerializable()
 class Details {
 
-  @JsonKey(name: "id") int id;
-  @JsonKey(name: "node_id") String nodeId;
-  @JsonKey(name: "login") String login;
-  @JsonKey(name: "url") String url;
-  @JsonKey(name: "avatar_url") String avatarUrl;
-  @JsonKey(name: "name") String name;
-  @JsonKey(name: "company") String company;
-  @JsonKey(name: "blog") String blog;
-  @JsonKey(name: "location") String location;
-  @JsonKey(name: "email") String email;
-  @JsonKey(name: "bio") String bio;
-  @JsonKey(name: "public_repos") int publicRepos;
-  @JsonKey(name: "public_gists") int publicGists;
-  @JsonKey(name: "followers") int followers;
-  @JsonKey(name: "following") int following;
-  @JsonKey(name: "created_at") String createdAt;
+  @JsonKey(name: "id") final int id;
+  @JsonKey(name: "node_id") final String nodeId;
+  @JsonKey(name: "login") final String login;
+  @JsonKey(name: "url") final String url;
+  @JsonKey(name: "avatar_url") final String avatarUrl;
+  @JsonKey(name: "name") final String name;
+  @JsonKey(name: "company") final String company;
+  @JsonKey(name: "blog") final String blog;
+  @JsonKey(name: "location") final String location;
+  @JsonKey(name: "email") final String email;
+  @JsonKey(name: "bio") final String bio;
+  @JsonKey(name: "public_repos") final int publicRepos;
+  @JsonKey(name: "public_gists") final int publicGists;
+  @JsonKey(name: "followers") final int followers;
+  @JsonKey(name: "following") final int following;
+  @JsonKey(name: "created_at") final String createdAt;
 
   Details({
       this.id,

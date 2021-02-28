@@ -5,11 +5,11 @@ part 'user.g.dart';
 @JsonSerializable()
 class User {
 
-  @JsonKey(name: "id") int id;
-  @JsonKey(name: "login") String login;
-  @JsonKey(name: "url") String url;
-  @JsonKey(name: "node_id") String nodeId;
-  @JsonKey(name: "avatar_url") String avatarUrl;
+  @JsonKey(name: "id") final int id;
+  @JsonKey(name: "login") final String login;
+  @JsonKey(name: "url") final String url;
+  @JsonKey(name: "node_id") final String nodeId;
+  @JsonKey(name: "avatar_url") final String avatarUrl;
 
   User({
     this.id,

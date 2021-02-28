@@ -87,21 +87,21 @@ class _UsersScreenState extends State<UsersScreen> {
 
             body: RefreshIndicator(
                 key: _refreshIndicatorKey,
-
-                onRefresh: () => _api.getUsers(0).then((items) => setState(() {
-                  _users = items;
-                })).catchError((error) {
-                  _showFlushbar(error.toString());
-
-//                  setState(() {
-//                    _users = [
-//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
-//                      User(id: "2", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
-//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
-//                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1")
-//                    ];
-//                  });
-                }),
+                onRefresh: (){},
+//                 onRefresh: () => _api.getUsers(0).then((items) => setState(() {
+//                   _users = items;
+//                 })).catchError((error) {
+//                   _showFlushbar(error.toString());
+//
+// //                  setState(() {
+// //                    _users = [
+// //                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
+// //                      User(id: "2", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
+// //                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1"),
+// //                      User(id: "1", nodeId: "1", login: "1", url: "1", avatarUrl: "1")
+// //                    ];
+// //                  });
+//                 }),
 
                 child: _getListWidget(context)
             )
@@ -209,12 +209,12 @@ class _UsersScreenState extends State<UsersScreen> {
 
     if (isDown && isEdge) {
       debugPrint("User screen _lastVisibleItem: $_lastVisibleItem");
-      _api.getUsers(0).then((items) => setState(() {
-          _users.addAll(items);
-        }
-      )).catchError((error) {
-        _showFlushbar(error.toString());
-      });
+      // _api.getUsers(0).then((items) => setState(() {
+      //     _users.addAll(items);
+      //   }
+      // )).catchError((error) {
+      //   _showFlushbar(error.toString());
+      // });
       return true;
     }
 
