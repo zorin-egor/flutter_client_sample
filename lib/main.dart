@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterclientsample/ui/base/constants.dart';
-import 'package:flutterclientsample/ui/users/users_screen.dart';
+import 'package:flutterclientsample/presentation/widgets/base/constants.dart';
+import 'package:flutterclientsample/presentation/screens/users/users_screen.dart';
 
 void main() {
   runApp(App());

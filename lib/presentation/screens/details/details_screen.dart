@@ -4,13 +4,14 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutterclientsample/api/api.dart';
-import 'package:flutterclientsample/data/details.dart';
-import 'package:flutterclientsample/data/user.dart';
-import 'package:flutterclientsample/ui/base/animation.dart';
-import 'package:flutterclientsample/ui/base/constants.dart';
-import 'package:flutterclientsample/ui/base/image_user.dart';
+import 'package:flutterclientsample/data/api/api_github.dart';
+import 'package:flutterclientsample/data/api/models/details.dart';
+import 'package:flutterclientsample/data/api/models/user.dart';
+import 'package:flutterclientsample/presentation/widgets/base/animation_route.dart';
+import 'package:flutterclientsample/presentation/widgets/base/constants.dart';
+import 'package:flutterclientsample/presentation/widgets/base/progress_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:dio/dio.dart';
 
 class DetailsScreen extends StatefulWidget {
 
@@ -29,7 +30,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
 
-  final Api _api = Api();
+  // final Dio _dio = Dio();
+  final ApiGithub _api = ApiGithub(Dio());
 
   Details _details;
 
@@ -63,7 +65,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
           body: RefreshIndicator(
               key: _refreshIndicatorKey,
 
-              onRefresh: () => _api.getDetailsJson(widget._user.url).then((item) => setState(() {
+              onRefresh: () => _api.getDetails(widget._user.url).then((item) => setState(() {
                 _details = item;
               })).catchError((error) {
                 _showSnackBar(error.toString());
@@ -104,9 +106,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               children: <Widget>[
 
                 // User avatar
-                ImageUser(
-                    _details?.avatarUrl
-                ),
+                ProgressImage(_details?.avatarUrl),
 
                 SizedBox(
                     height: DEFAULT_WIDGET_MARGIN_MEDIUM
@@ -115,7 +115,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 // User detail information
                 ..._details?.toPretty()?.entries?.map((entry) {
 
-                  final value = entry.value.replaceAll("null", "");
+                  final value = entry.value/*.replaceAll("null", "")*/;
 
                   bool isUrl = false;
                   try {
@@ -133,7 +133,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 
-  Widget _getDetailsWidget(BuildContext context, String title, String value, bool isUrl) {
+  Widget _getDetailsWidget(BuildContext context, dynamic title, dynamic value, bool isUrl) {
     return Padding(
         padding: EdgeInsets.only(
             left: DEFAULT_WIDGET_MARGIN_LARGE,

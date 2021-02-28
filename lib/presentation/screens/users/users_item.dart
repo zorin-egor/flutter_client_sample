@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterclientsample/data/user.dart';
-import 'package:flutterclientsample/ui/base/constants.dart';
-import 'package:flutterclientsample/ui/base/image_user.dart';
+import 'package:flutterclientsample/data/api/models/user.dart';
+import 'package:flutterclientsample/presentation/widgets/base/constants.dart';
+import 'package:flutterclientsample/presentation/widgets/base/progress_image.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class UserItem extends StatefulWidget {
@@ -74,7 +74,7 @@ class _UserItemState extends State<UserItem> {
         children: <Widget>[
 
           // User avatar
-          ImageUser(
+          ProgressImage(
               widget._item.avatarUrl
           ),
 

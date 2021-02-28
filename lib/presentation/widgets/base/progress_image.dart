@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutterclientsample/ui/base/constants.dart';
+import 'package:flutterclientsample/presentation/widgets/base/constants.dart';
 
-class ImageUser extends StatefulWidget {
+class ProgressImage extends StatefulWidget {
 
-  String _url;
+  final String _url;
 
-  ImageUser(this._url, { Key key }) : super(key: key);
+  ProgressImage(this._url, { Key key }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => ImageUserState();
+  State<StatefulWidget> createState() => ProgressImageState();
 
 }
 
-class ImageUserState extends State<ImageUser> {
+class ProgressImageState extends State<ProgressImage> {
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,7 @@ class ImageUserState extends State<ImageUser> {
           widget._url ?? "",
           fit: BoxFit.cover,
           loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent loadingProgress) {
-            if (loadingProgress == null) {
-              return child;
-            }
-
-            return Center(
+             return loadingProgress == null? child : Center(
               child: CircularProgressIndicator(
                 value: loadingProgress.expectedTotalBytes != null?
                 loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes : null,
