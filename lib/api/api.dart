@@ -32,7 +32,7 @@ class Api {
     try {
       _isUsersFuture = true;
       final userId = sinceUser ?? _userId;
-      _response = await Http.get(_url + USERS_PATH + userId);
+      _response = await Http.get(Uri.parse(_url + USERS_PATH + userId));
 
       if (200 <= _response.statusCode && _response.statusCode < 300) {
         final users = User.fromJson(_response.body);
@@ -60,7 +60,7 @@ class Api {
 
     try {
       _isDetailsFuture = true;
-      _response = await Http.get(detailsUrl);
+      _response = await Http.get(Uri.parse(detailsUrl));
 
       if (200 <= _response.statusCode && _response.statusCode < 300) {
         final details = Details.fromJson(_response.body);
